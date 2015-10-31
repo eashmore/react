@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tabs</title>
+
+    <script src="https://fb.me/react-0.13.3.js" charset="utf-8"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div id="my-component"></div>
+
+    <script type="text/jsx">
+      var Tabs = React.createClass({
+        getInitialState: function() {
+          return { selectedTab: null };
+        },
+
+        changeTab: function(event) {
+          this.setState({
+            selectedTab: event.currentTarget.innerHTML
+          });
+        },
+
+        render: function() {
+          return (
+            <div>
+              <ul>
+                {
+                  Object.keys(this.props.articles).map(function(title) {
+                    return <li key={title} onClick={this.changeTab}>{ title }</li>
+                  }.bind(this))
+                }
+              </ul>
+
+              <article>
+                {
+                  this.props.articles[this.state.selectedTab]
+                }
+              </article>
+            </div>
+          )
+        }
+      });
+
+      var articles = {
+        "one": "I am the first",
+        "two": "Second pane here",
+        "three": "Third pane here"
+      };
+
+      React.render(
+        <div><Tabs articles={ articles }/></div>,
+        document.getElementById("my-component")
+      )
+    </script>
+  </body>
+</html>
