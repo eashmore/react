@@ -29,7 +29,11 @@
               <ul>
                 {
                   Object.keys(this.props.articles).map(function(title) {
-                    return <li key={title} onClick={this.changeTab}>{ title }</li>
+                    if (title === this.state.selectedTab) {
+                      return <li key={title} onClick={this.changeTab}><strong>{ title }</strong></li>
+                    } else {
+                      return <li key={title} onClick={this.changeTab}>{ title }</li>
+                    }
                   }.bind(this))
                 }
               </ul>
