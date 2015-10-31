@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather Clock</title>
+
+    <script src="https://fb.me/react-0.13.3.js" charset="utf-8"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="weather-clock"></div>
+
+    <script type="text/jsx">
+      var Clock = React.createClass({
+        getInitialState: function() {
+          return { time: new Date().toString() }
+        },
+
+        componentDidMount: function() {
+          setInterval(this.updateTime, 1000);
+        },
+
+        updateTime: function() {
+          this.setState({
+            time: new Date().toString()
+          })
+        },
+
+        render: function() {
+          return (
+            <div>
+              { this.state.time }
+            </div>
+          )
+        }
+      })
+
+      var Weather = React.createClass({
+        getInitialState: function () {
+          return { weather: null }
+        },
+
+        componentDidMount: function () {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude.toString();
+            var lon = position.coords.longitude.toString();
+          })
+
+          var url = "http://api.openweathermap.org/data/2.5/weather?lat=" + "35" + "&lon=" + "138" + "&appid=bd82977b86bf27fb59a04b61b657fb6f";
+
+          this.xmlRequest(url);
+        },
+
+        xmlRequest: function(url) {
+          var request = new XMLHttpRequest();
+
+          var result = "Error";
+          request.onreadystatechange = function() {
+            if (request.status == 200) {
+              result = request.responseText;
+            }
+            this.setState({
+              weather: result
+            });
+          }.bind(this);
+
+          request.open('GET', url, true);
+          request.send();
+        },
+
+        render: function () {
+          return (
+            <div>
+              { this.state.weather }
+            </div>
+          )
+        }
+      })
+
+      React.render(
+        <div>
+          <Clock/>
+          <Weather/>
+        </div>,
+        document.getElementById("weather-clock")
+      )
+    </script>
+  </body>
+</html>
